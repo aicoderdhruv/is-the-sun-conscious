@@ -1,0 +1,711 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Is the Sun Conscious?</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="An immersive journey through Rupert Sheldrake's 2021 essay on whether the Sun might be conscious.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..700;1,6..96,400..700&family=Figtree:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: fixed WebGL cosmos behind a tall scroll story; one glass panel per chapter, alternating sides; camera flies on scroll. */
+:root{
+  --void:#06040a;          /* deep space */
+  --plasma:#ff8a2a;        /* photosphere orange */
+  --corona:#ffd58a;        /* corona gold */
+  --field:#7fd8ff;         /* magnetic / "thought" cyan */
+  --ink:#f4ede3;           /* warm starlight text */
+  --dust:#a69a8e;          /* muted copy */
+  --glass:rgba(12,8,14,.58);
+  --hair:rgba(255,213,138,.18);
+  --f-display:"Bodoni Moda","Didot","Bodoni 72",Georgia,serif;
+  --f-body:"Figtree",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --f-mono:"JetBrains Mono",ui-monospace,"SFMono-Regular",Menlo,monospace;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{background:var(--void)}
+body{background:var(--void);color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+#gl{position:fixed;inset:0;width:100%;height:100%;display:block;z-index:0;background:radial-gradient(ellipse at 70% 45%,#2a1206 0%,var(--void) 60%)}
+.vignette{position:fixed;inset:0;pointer-events:none;z-index:1;background:radial-gradient(ellipse at center,transparent 45%,rgba(3,2,6,.75) 100%)}
+.grain{position:fixed;inset:-50%;pointer-events:none;z-index:2;opacity:.06;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");animation:grain 1.2s steps(4) infinite}
+@keyframes grain{0%{transform:translate(0,0)}25%{transform:translate(-3%,2%)}50%{transform:translate(2%,-3%)}75%{transform:translate(-2%,-1%)}100%{transform:translate(0,0)}}
+
+/* HUD */
+.hud{position:fixed;top:0;left:0;right:0;z-index:20;display:flex;justify-content:space-between;align-items:center;padding-top:calc(14px + env(safe-area-inset-top,0px));padding-bottom:14px;padding-left:max(20px,env(safe-area-inset-left,0px));padding-right:max(20px,env(safe-area-inset-right,0px));pointer-events:none}
+.mark{font-family:var(--f-mono);font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--corona);display:flex;gap:10px;align-items:center}
+.mark i{width:8px;height:8px;border-radius:50%;background:var(--plasma);box-shadow:0 0 12px var(--plasma),0 0 26px var(--plasma);animation:beat 3.2s ease-in-out infinite}
+@keyframes beat{0%,100%{transform:scale(1);opacity:.9}50%{transform:scale(1.5);opacity:1}}
+.coord{font-family:var(--f-mono);font-size:11px;letter-spacing:.12em;color:var(--dust);text-align:right}
+.coord b{color:var(--ink);font-weight:500}
+
+.rail{position:fixed;right:max(18px,env(safe-area-inset-right,0px));top:50%;transform:translateY(-50%);z-index:20;display:flex;flex-direction:column;gap:12px}
+.rail button{all:unset;cursor:pointer;display:flex;align-items:center;justify-content:flex-end;gap:10px;font-family:var(--f-mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:transparent;transition:color .3s}
+.rail button span.d{width:6px;height:6px;border-radius:50%;border:1px solid var(--dust);transition:all .35s}
+.rail button:hover,.rail button:focus-visible{color:var(--dust)}
+.rail button:focus-visible span.d{outline:2px solid var(--field);outline-offset:3px}
+.rail button.on{color:var(--corona)}
+.rail button.on span.d{background:var(--plasma);border-color:var(--plasma);box-shadow:0 0 10px var(--plasma);transform:scale(1.5)}
+
+/* Story */
+main{position:relative;z-index:10}
+.ch{min-height:115vh;display:flex;align-items:center;padding-block:14vh;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.ch.r{justify-content:flex-end}
+.ch .wrap{width:min(500px,100%);margin-inline:clamp(0px,6vw,96px)}
+.ch.r .wrap{margin-right:clamp(40px,8vw,130px)}
+.panel{background:var(--glass);backdrop-filter:blur(14px) saturate(1.2);-webkit-backdrop-filter:blur(14px) saturate(1.2);border:1px solid var(--hair);border-radius:3px;padding:clamp(22px,3.2vw,36px);box-shadow:0 30px 80px -30px rgba(0,0,0,.8)}
+.eyebrow{font-family:var(--f-mono);font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--plasma);display:flex;gap:12px;align-items:center;margin:0 0 18px}
+.eyebrow::after{content:"";flex:1;height:1px;background:linear-gradient(90deg,var(--hair),transparent)}
+h1,h2{font-family:var(--f-display);font-weight:400;line-height:1.02;letter-spacing:-.01em;text-wrap:balance;margin:0 0 20px}
+h1{font-size:clamp(52px,9vw,124px);font-style:italic;font-variation-settings:"opsz" 96}
+h1 em{font-style:normal;color:var(--corona);text-shadow:0 0 40px rgba(255,138,42,.55)}
+h2{font-size:clamp(34px,4.6vw,58px)}
+h2 em{font-style:italic;color:var(--corona)}
+p{margin:0 0 14px;color:#ddd3c7;max-width:62ch}
+p.lede{font-size:clamp(17px,1.5vw,19px);color:var(--ink)}
+.q{font-family:var(--f-display);font-style:italic;font-size:clamp(20px,2vw,24px);line-height:1.35;color:var(--corona);border-left:1px solid var(--plasma);padding-left:16px;margin:18px 0}
+.q small{display:block;font-family:var(--f-mono);font-style:normal;font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--dust);margin-top:8px}
+.src{font-family:var(--f-mono);font-size:10.5px;letter-spacing:.1em;color:var(--dust);margin-top:18px;text-transform:uppercase}
+
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(96px,1fr));gap:1px;background:var(--hair);border:1px solid var(--hair);margin:20px 0 6px}
+.stat{background:rgba(8,5,10,.85);padding:14px 14px 12px;min-width:0}
+.stat .n{font-family:var(--f-display);font-size:30px;line-height:1;color:var(--ink);font-variant-numeric:tabular-nums;white-space:nowrap}
+.stat .n sup{font-size:.5em}
+.stat .l{font-family:var(--f-mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--dust);margin-top:8px;line-height:1.4}
+
+.gods{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:18px 0}
+.god{border-top:1px solid var(--plasma);padding-top:8px;min-width:0}
+.god b{display:block;font-family:var(--f-display);font-size:22px;font-weight:400;color:var(--ink)}
+.god span{font-family:var(--f-mono);font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--dust)}
+
+.ladder{list-style:none;padding:0;margin:18px 0;display:flex;flex-wrap:wrap;gap:6px 4px;align-items:center}
+.ladder li{font-family:var(--f-mono);font-size:11px;letter-spacing:.06em;padding:5px 9px;border:1px solid var(--hair);color:var(--dust);border-radius:2px}
+.ladder li.hot{color:var(--void);background:var(--plasma);border-color:var(--plasma);font-weight:500}
+.ladder li.sep{border:none;padding:0 1px;color:var(--plasma)}
+
+.btn{all:unset;cursor:pointer;display:inline-flex;gap:12px;align-items:center;font-family:var(--f-mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--void);background:linear-gradient(110deg,var(--corona),var(--plasma) 60%,#ff5a1a);padding:13px 20px;border-radius:2px;position:relative;overflow:hidden;margin-top:10px;transition:transform .25s,box-shadow .25s;box-shadow:0 0 0 rgba(255,138,42,0)}
+.btn::before{content:"";position:absolute;inset:0;background:linear-gradient(100deg,transparent 30%,rgba(255,255,255,.55) 50%,transparent 70%);transform:translateX(-120%);transition:transform .7s}
+.btn:hover{transform:translateY(-2px);box-shadow:0 10px 40px -8px rgba(255,138,42,.8)}
+.btn:hover::before{transform:translateX(120%)}
+.btn:focus-visible{outline:2px solid var(--field);outline-offset:4px}
+.btn.cool{background:linear-gradient(110deg,#d9f4ff,var(--field) 60%,#3aa7e0)}
+.btn:disabled{opacity:.5;cursor:wait}
+
+.meter{margin-top:18px;border:1px solid var(--hair);padding:14px;font-family:var(--f-mono);font-size:12px;color:var(--dust);display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.meter b{display:block;font-family:var(--f-display);font-weight:400;font-size:30px;color:var(--field);font-variant-numeric:tabular-nums;line-height:1.1}
+.meter .bar{grid-column:1/-1;height:2px;background:var(--hair);position:relative;overflow:hidden}
+.meter .bar i{position:absolute;inset:0 auto 0 0;width:0;background:var(--field);box-shadow:0 0 10px var(--field)}
+.meter .msg{grid-column:1/-1;color:var(--ink);min-height:1.4em}
+
+.split{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:16px 0}
+.split>div{border-top:1px solid var(--field);padding-top:10px;min-width:0}
+.split h3{font-family:var(--f-display);font-weight:400;font-size:22px;margin:0 0 6px}
+.split p{font-size:14.5px;margin:0}
+
+.verdict{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--hair);border:1px solid var(--hair);margin:18px 0}
+.verdict>div{background:rgba(8,5,10,.85);padding:16px;min-width:0}
+.verdict h3{font-family:var(--f-mono);font-weight:500;font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;margin:0 0 10px}
+.verdict .for h3{color:var(--plasma)} .verdict .against h3{color:var(--field)}
+.verdict ul{margin:0;padding-left:16px;font-size:14px;color:#ddd3c7}
+.verdict li{margin-bottom:6px}
+
+.hero .wrap{width:min(720px,100%)}
+.hero .panel{background:transparent;border:none;box-shadow:none;backdrop-filter:none;-webkit-backdrop-filter:none;padding-left:0}
+.cue{display:flex;align-items:center;gap:14px;margin-top:34px;font-family:var(--f-mono);font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--dust)}
+.cue i{width:1px;height:46px;background:linear-gradient(var(--plasma),transparent);position:relative;overflow:hidden}
+.cue i::after{content:"";position:absolute;left:0;top:-30%;width:1px;height:30%;background:var(--ink);animation:drip 2s ease-in infinite}
+@keyframes drip{to{top:110%}}
+
+.w{display:inline-block;white-space:pre}
+footer{position:relative;z-index:10;padding-block:40px 60px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));text-align:center;font-family:var(--f-mono);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--dust)}
+footer a{color:var(--corona)}
+
+@media (max-width:760px){
+  body{font-size:15px}
+  .ch,.ch.r{display:block;min-height:0;padding-top:58vh;padding-top:58svh;padding-bottom:14vh}
+  .ch .wrap,.ch.r .wrap{margin:0;width:100%}
+  .hero{padding-top:50vh;padding-top:50svh}
+  .hero .panel{padding:0}
+  .hero .eyebrow{font-size:10px}
+  .rail{display:none}
+  .coord{display:block;font-size:10px}
+  .coord .sc{display:none}
+  .xtra{display:none}
+  .gods{grid-template-columns:repeat(2,1fr)}
+  .split,.verdict{grid-template-columns:1fr}
+  .panel{background:rgba(10,6,12,.74);padding:20px}
+  h2{font-size:clamp(30px,8.6vw,40px)}
+  p{font-size:15px}
+  .stat .n{font-size:26px}
+  .meter b{font-size:24px}
+  .btn{width:100%;justify-content:center;box-sizing:border-box}
+}
+@media (prefers-reduced-motion:reduce){.grain,.cue i::after,.mark i{animation:none}}
+.nogl #gl{background:radial-gradient(circle at 70% 40%,#ffb347 0,#ff6a00 9%,#7a1d00 18%,var(--void) 45%)}
+</style>
+</head><body>
+
+<canvas id="gl" aria-hidden="true"></canvas>
+<div class="vignette"></div>
+<div class="grain"></div>
+
+<header class="hud">
+  <div class="mark"><i></i>Heliomind</div>
+  <div class="coord">Chapter <b id="chNum">00</b> / 10 <span class="sc">&nbsp;·&nbsp; </span><b id="chScale" class="sc">Photosphere · 1 R☉</b></div>
+</header>
+<nav class="rail" id="rail" aria-label="Chapters"></nav>
+
+<main id="story">
+  <!-- 0 -->
+  <section class="ch hero" data-name="Question" data-scale="Photosphere · 1 R☉">
+    <div class="wrap"><div class="panel">
+      <p class="eyebrow">A journey through Rupert Sheldrake's essay · J. Consciousness Studies, 2021</p>
+      <h1 class="split-in">Is the <em>Sun</em> conscious?</h1>
+      <p class="lede">For most of human history the answer was obvious. For the last four centuries it has been laughable. A new wave of philosophy of mind is quietly reopening the question.</p>
+      <p class="xtra">Scroll to travel from the Sun's boiling surface out to the edge of the galaxy, following the argument one scale at a time.</p>
+      <div class="cue"><i></i>Scroll to begin</div>
+    </div></div>
+  </section>
+
+  <!-- 1 -->
+  <section class="ch r" data-name="Ancients" data-scale="Photosphere · 1 R☉">
+    <div class="wrap"><div class="panel">
+      <p class="eyebrow">01 · The oldest answer</p>
+      <h2 class="split-in">Almost every civilisation said <em>yes.</em></h2>
+      <p>The Sun was a person before it was a fireball. Plato called the heavenly bodies "visible gods", and described the cosmos as a living creature with soul and reason.</p>
+      <div class="gods">
+        <div class="god"><b>Surya</b><span>India</span></div>
+        <div class="god"><b>Sol</b><span>Rome</span></div>
+        <div class="god"><b>Amaterasu</b><span>Japan</span></div>
+        <div class="god"><b>Sunna</b><span>Germanic</span></div>
+      </div>
+      <div class="q">"may he inspire our intelligence"<small>Gayatri mantra · Radhakrishnan's translation</small></div>
+      <p class="xtra">Mechanistic science, from the 1600s on, turned the Sun into an inanimate object. To call it conscious became, at best, poetry.</p>
+    </div></div>
+  </section>
+
+  <!-- 2 -->
+  <section class="ch" data-name="Panpsychism" data-scale="Inner corona · 6 R☉">
+    <div class="wrap"><div class="panel">
+      <p class="eyebrow">02 · Mind as a matter of degree</p>
+      <h2 class="split-in">Not <em>whether</em> matter feels, but how much.</h2>
+      <p>Panpsychists such as Galen Strawson and Philip Goff dodge the "hard problem" by making experience a basic feature of nature that grows richer as systems organise. Rocks, tables and socks don't qualify. Self-organising wholes do.</p>
+      <ul class="ladder" aria-label="Nested hierarchy of wholes">
+        <li>quark</li><li class="sep">›</li><li>proton</li><li class="sep">›</li><li>atom</li><li class="sep">›</li><li>molecule</li><li class="sep">›</li><li>cell</li><li class="sep">›</li><li>organism</li><li class="sep">›</li><li>planet</li><li class="sep">›</li><li class="hot">star</li><li class="sep">›</li><li>galaxy</li>
+      </ul>
+      <p class="xtra">Arthur Koestler called each level a <em>holon</em>: a whole made of parts, and a part of a larger whole. Whitehead put it bluntly: physics studies the smaller organisms. Modern cosmology adds the very large ones.</p>
+    </div></div>
+  </section>
+
+  <!-- 3 -->
+  <section class="ch r" data-name="Fields" data-scale="Magnetosphere · 10 R☉">
+    <div class="wrap"><div class="panel">
+      <p class="eyebrow">03 · Fields bind</p>
+      <h2 class="split-in">What if mind <em>is</em> a field?</h2>
+      <p>Your brain is an electrical organ. Neurons sit at about 60 mV, and their combined activity rises into rhythms you can record through the skull.</p>
+      <div class="stats">
+        <div class="stat"><div class="n" data-count="7" data-to="15">7–15</div><div class="l">Hz · alpha, relaxed wakefulness</div></div>
+        <div class="stat"><div class="n">25–140</div><div class="l">Hz · gamma, unified perception</div></div>
+      </div>
+      <p>JohnJoe McFadden, Susan Pockett and Todd Murphy go further: the brain's electromagnetic field may not just accompany experience, it may <em>be</em> experience. Fields are integrative by nature, which solves the puzzle of how scattered signals become one moment of awareness.</p>
+      <p class="xtra">Sprinkle iron filings near a magnet. The field shapes every grain at once. Now look at the lines around the Sun.</p>
+    </div></div>
+  </section>
+
+  <!-- 4 -->
+  <section class="ch" data-name="Plasma body" data-scale="Active region · 1.2 R☉" id="plasma">
+    <div class="wrap"><div class="panel">
+      <p class="eyebrow">04 · A body made of plasma</p>
+      <h2 class="split-in">The most complex thing we know may not be <em>us.</em></h2>
+      <p>The Sun is electrified gas. As it turns, its layers slide past one another, and moving charge makes magnetism. Field and plasma steer each other in a closed loop.</p>
+      <div class="stats">
+        <div class="stat"><div class="n" data-count="28">28</div><div class="l">days per rotation</div></div>
+        <div class="stat"><div class="n">1M+</div><div class="l">granules on the visible face</div></div>
+        <div class="stat"><div class="n" data-count="22">22</div><div class="l">year full magnetic cycle</div></div>
+      </div>
+      <p class="xtra">Sunspots are knots of field so strong they choke convection. When looped fields snap and reconnect, the Sun fires flares and coronal mass ejections carrying billions of tonnes of plasma.</p>
+      <p>If the Sun has a mind, these may be its gestures.</p>
+      <button class="btn" id="cmeBtn" type="button">Trigger a coronal mass ejection <span aria-hidden="true">→</span></button>
+    </div></div>
+  </section>
+
+  <!-- 5 -->
+  <section class="ch r" data-name="Integration" data-scale="Granulation · 0.001 R☉">
+    <div class="wrap"><div class="panel">
+      <p class="eyebrow">05 · Integrated information · Φ</p>
+      <h2 class="split-in">Does the Sun know <em>itself?</em></h2>
+      <p>Giulio Tononi's Integrated Information Theory says a system is conscious to the degree that its parts are richly interconnected and its next state depends on its own past state, not just on outside input.</p>
+      <div class="split xtra">
+        <div><h3>Brain</h3><p>Billions of neurons, vast numbers of possible states, dense feedback loops.</p></div>
+        <div><h3>Sun</h3><p>Granules nest inside super-granules, all coupled through one global field. Its behaviour is largely driven from within.</p></div>
+      </div>
+      <div class="stats">
+        <div class="stat"><div class="n">5×10<sup>79</sup></div><div class="l">years to compute Φ for a 302-neuron worm</div></div>
+      </div>
+      <p>So Φ for the Sun can't be computed. And IIT has a catch: only the largest integrated system counts. If the galaxy were conscious, the Sun would not be. Sheldrake argues this rule must bend to allow minds within minds.</p>
+    </div></div>
+  </section>
+
+  <!-- 6 -->
+  <section class="ch" data-name="Thought speed" data-scale="Solar diameter · 1.39M km" id="pulse">
+    <div class="wrap"><div class="panel">
+      <p class="eyebrow">06 · The speed of a solar thought</p>
+      <h2 class="split-in">A single thought takes <em>4.6 seconds</em> to cross it.</h2>
+      <p>If the Sun's mind lives in its fields, it can think no faster than light. That sets a pace for its awareness. Press the button and watch a signal cross the Sun in real time.</p>
+      <button class="btn cool" id="pulseBtn" type="button">Send a thought across the Sun <span aria-hidden="true">→</span></button>
+      <div class="meter" aria-live="polite">
+        <div>Elapsed<b id="mT">0.0 s</b></div>
+        <div>Distance<b id="mD">0 km</b></div>
+        <div class="bar"><i id="mBar"></i></div>
+        <div class="msg" id="mMsg">Ready.</div>
+      </div>
+      <p style="margin-top:16px">To feel the edge of its body, the heliopause about 120 times farther out than Earth, a signal needs <b>16.7 hours</b>. By our standards, a slow and vast mind.</p>
+    </div></div>
+  </section>
+
+  <!-- 7 -->
+  <section class="ch" data-name="Heliosphere" data-scale="Heliosphere · 120 AU">
+    <div class="wrap"><div class="panel">
+      <p class="eyebrow">07 · The solar system as its body</p>
+      <h2 class="split-in">A skin made of <em>wind.</em></h2>
+      <p>The solar wind blows outward until it meets the galactic wind at the heliopause, about 18 billion km away. Inside that membrane, Sheldrake suggests, the whole heliosphere behaves like one organism with the Sun as its centre.</p>
+      <div class="split">
+        <div><h3>Senses</h3><p>Its field could register events anywhere in the system. Through gravity it feels the tidal pull of every planet.</p></div>
+        <div><h3>Acts</h3><p>It modulates the system through the wind's intensity, aimed flares and coronal mass ejections.</p></div>
+      </div>
+      <p class="xtra">We already feel this on Earth: auroras, radio blackouts and grid failures. NOAA issues space-weather forecasts for exactly this reason.</p>
+      <p class="src">Planet orbits shown compressed, not to scale</p>
+    </div></div>
+  </section>
+
+  <!-- 8 -->
+  <section class="ch r" data-name="Volition" data-scale="Solar neighbourhood · 1,000 ly">
+    <div class="wrap"><div class="panel">
+      <p class="eyebrow">08 · Stars that steer</p>
+      <h2 class="split-in">Stars that <em>choose</em> where to go.</h2>
+      <p>Galaxies spin as if held by far more mass than we can see. The standard answer is dark matter, which has never been directly detected.</p>
+      <div class="split">
+        <div><h3>Matloff</h3><p>Physicist Greg Matloff proposes that stars steer themselves with lopsided jets, the way cells in an embryo move into place. He offers tests: more jets farther from the galactic centre, aimed against a young star's path.</p></div>
+        <div><h3>Vidal</h3><p>Philosopher Clément Vidal proposes "stellivores": binary stars where one feeds on the other. Sirius A grew at the expense of Sirius B. Fast binaries should head toward their next meal.</p></div>
+      </div>
+      <p>Our Sun is single: neither predator nor prey.</p>
+    </div></div>
+  </section>
+
+  <!-- 9 -->
+  <section class="ch" data-name="Galaxy" data-scale="Milky Way · 100,000 ly">
+    <div class="wrap"><div class="panel">
+      <p class="eyebrow">09 · A galactic mind?</p>
+      <h2 class="split-in">Neurons in a <em>galactic</em> brain.</h2>
+      <p>The Sun is one of a few hundred billion stars wired together by plasma and magnetic fields running along spiral arms tens of thousands of light years long. At the centre sits a supermassive black hole that flares several times a year.</p>
+      <div class="stats">
+        <div class="stat"><div class="n" data-count="50000">50,000</div><div class="l">years for one thought to reach the rim</div></div>
+        <div class="stat"><div class="n">50+</div><div class="l">galaxies in our local group</div></div>
+      </div>
+      <p class="xtra">Beyond that, magnetic filaments hundreds of millions of light years long link galaxy clusters into a cosmic web. If minds nest, this is where the nesting ends.</p>
+    </div></div>
+  </section>
+
+  <!-- 10 -->
+  <section class="ch" data-name="Verdict" data-scale="Photosphere · 1 R☉">
+    <div class="wrap"><div class="panel">
+      <p class="eyebrow">10 · Where this leaves us</p>
+      <h2 class="split-in">A hypothesis, not a <em>finding.</em></h2>
+      <div class="verdict">
+        <div class="for"><h3>What makes it plausible</h3><ul>
+          <li>Panpsychism treats mind as graded, not binary</li>
+          <li>Field theories tie experience to integrated EM activity</li>
+          <li>The Sun is a vast, self-driven, field-integrated system</li>
+        </ul></div>
+        <div class="against"><h3>What keeps it open</h3><ul>
+          <li>No one can measure Φ for a brain, let alone a star</li>
+          <li>Solar physics explains flares without a mind</li>
+          <li>EM field theories of consciousness are themselves contested</li>
+        </ul></div>
+      </div>
+      <p>The useful part is that some versions can be tested. Matloff's jets and Vidal's hunting binaries make predictions that existing star catalogues could check.</p>
+      <div class="q">The next time you feel sunlight on your skin, ask what, if anything, is on the other end.</div>
+      <button class="btn" id="topBtn" type="button">Return to the surface <span aria-hidden="true">↑</span></button>
+      <p class="src">Source · Sheldrake, R. (2021) "Is the Sun Conscious?" Journal of Consciousness Studies 28(3–4), pp. 8–28</p>
+    </div></div>
+  </section>
+</main>
+<footer>Visualisation is artistic: field lines, cells and orbits are illustrative, not to scale.</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/lenis@1.1.13/dist/lenis.min.js"></script>
+<script>
+(function(){
+"use strict";
+const lite = matchMedia('(max-width:760px), (pointer:coarse)').matches;
+const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+gsap.registerPlugin(ScrollTrigger);
+
+/* ---------- Smooth scroll ---------- */
+let lenis=null;
+if(!reduced && window.Lenis){
+  lenis=new Lenis({duration:1.25,smoothWheel:true});
+  lenis.on('scroll',ScrollTrigger.update);
+  gsap.ticker.add(t=>lenis.raf(t*1000));
+  gsap.ticker.lagSmoothing(0);
+}
+const scrollToEl=(el)=>{ if(lenis) lenis.scrollTo(el,{duration:2.2}); else el.scrollIntoView({behavior:reduced?'auto':'smooth'}); };
+
+/* ---------- Chapter rail ---------- */
+const sections=[...document.querySelectorAll('.ch')];
+const rail=document.getElementById('rail');
+sections.forEach((s,i)=>{
+  const b=document.createElement('button'); b.type='button';
+  b.innerHTML=s.dataset.name+'<span class="d"></span>';
+  b.setAttribute('aria-label','Go to chapter '+i+': '+s.dataset.name);
+  b.addEventListener('click',()=>scrollToEl(s)); rail.appendChild(b);
+  ScrollTrigger.create({trigger:s,start:'top 55%',end:'bottom 55%',onToggle:self=>{
+    if(self.isActive){ [...rail.children].forEach((c,j)=>c.classList.toggle('on',j===i));
+      document.getElementById('chNum').textContent=String(i).padStart(2,'0');
+      document.getElementById('chScale').textContent=s.dataset.scale; }
+  }});
+});
+document.getElementById('topBtn').addEventListener('click',()=>scrollToEl(sections[0]));
+
+/* ---------- Text reveals (BlurText / FadeContent style) ---------- */
+document.querySelectorAll('.split-in').forEach(h=>{
+  const walk=(node)=>{
+    [...node.childNodes].forEach(n=>{
+      if(n.nodeType===3){
+        const frag=document.createDocumentFragment();
+        n.textContent.split(/(\s+)/).forEach(t=>{
+          if(!t) return;
+          if(/^\s+$/.test(t)){frag.appendChild(document.createTextNode(t));return;}
+          const s=document.createElement('span'); s.className='w'; s.textContent=t; frag.appendChild(s);
+        });
+        n.replaceWith(frag);
+      } else if(n.nodeType===1) walk(n);
+    });
+  }; walk(h);
+});
+if(!reduced){
+  sections.forEach((s,i)=>{
+    const words=s.querySelectorAll('.w');
+    const rest=s.querySelectorAll('.panel > *:not(h1):not(h2)');
+    const cfg={trigger:s,start:'top 72%',toggleActions:'play none none reverse'};
+    if(i===0){
+      gsap.fromTo(words,{opacity:0,filter:'blur(14px)',y:'.35em'},{opacity:1,filter:'blur(0px)',y:0,duration:1.4,stagger:.09,ease:'power3.out',delay:.3});
+      gsap.fromTo(rest,{opacity:0,y:24},{opacity:1,y:0,duration:1.2,stagger:.12,delay:.9,ease:'power2.out'});
+      return;
+    }
+    gsap.fromTo(words,{opacity:.12,filter:'blur(8px)',y:'.3em'},{opacity:1,filter:'blur(0px)',y:0,duration:1,stagger:.05,ease:'power3.out',scrollTrigger:cfg});
+    gsap.fromTo(rest,{opacity:.15,y:22},{opacity:1,y:0,duration:.9,stagger:.07,ease:'power2.out',scrollTrigger:cfg});
+    s.querySelectorAll('.stat,.god,.ladder li').forEach((el,k)=>{});
+    const items=s.querySelectorAll('.stat,.god,.ladder li:not(.sep)');
+    if(items.length) gsap.fromTo(items,{opacity:.1,y:16,scale:.96},{opacity:1,y:0,scale:1,duration:.7,stagger:.06,ease:'back.out(1.6)',scrollTrigger:{...cfg,start:'top 60%'}});
+  });
+}
+
+/* ---------- WebGL cosmos ---------- */
+const canvas=document.getElementById('gl');
+let renderer;
+try{ renderer=new THREE.WebGLRenderer({canvas,antialias:!lite,alpha:false,powerPreference:'high-performance'}); }
+catch(e){ document.documentElement.classList.add('nogl'); return; }
+const DPR=Math.min(window.devicePixelRatio||1,lite?1.3:1.75);
+renderer.setPixelRatio(DPR);
+renderer.setClearColor(0x06040a,1);
+const scene=new THREE.Scene();
+const camera=new THREE.PerspectiveCamera(48,1,0.03,20000);
+
+const NOISE=`
+vec3 mod289(vec3 x){return x-floor(x*(1.0/289.0))*289.0;}
+vec4 mod289(vec4 x){return x-floor(x*(1.0/289.0))*289.0;}
+vec4 permute(vec4 x){return mod289(((x*34.0)+1.0)*x);}
+vec4 taylorInvSqrt(vec4 r){return 1.79284291400159-0.85373472095314*r;}
+float snoise(vec3 v){const vec2 C=vec2(1.0/6.0,1.0/3.0);const vec4 D=vec4(0.0,0.5,1.0,2.0);
+vec3 i=floor(v+dot(v,C.yyy));vec3 x0=v-i+dot(i,C.xxx);vec3 g=step(x0.yzx,x0.xyz);vec3 l=1.0-g;
+vec3 i1=min(g.xyz,l.zxy);vec3 i2=max(g.xyz,l.zxy);vec3 x1=x0-i1+C.xxx;vec3 x2=x0-i2+C.yyy;vec3 x3=x0-D.yyy;
+i=mod289(i);vec4 p=permute(permute(permute(i.z+vec4(0.0,i1.z,i2.z,1.0))+i.y+vec4(0.0,i1.y,i2.y,1.0))+i.x+vec4(0.0,i1.x,i2.x,1.0));
+float n_=0.142857142857;vec3 ns=n_*D.wyz-D.xzx;vec4 j=p-49.0*floor(p*ns.z*ns.z);vec4 x_=floor(j*ns.z);vec4 y_=floor(j-7.0*x_);
+vec4 x=x_*ns.x+ns.yyyy;vec4 y=y_*ns.x+ns.yyyy;vec4 h=1.0-abs(x)-abs(y);vec4 b0=vec4(x.xy,y.xy);vec4 b1=vec4(x.zw,y.zw);
+vec4 s0=floor(b0)*2.0+1.0;vec4 s1=floor(b1)*2.0+1.0;vec4 sh=-step(h,vec4(0.0));vec4 a0=b0.xzyw+s0.xzyw*sh.xxyy;vec4 a1=b1.xzyw+s1.xzyw*sh.zzww;
+vec3 p0=vec3(a0.xy,h.x);vec3 p1=vec3(a0.zw,h.y);vec3 p2=vec3(a1.xy,h.z);vec3 p3=vec3(a1.zw,h.w);
+vec4 norm=taylorInvSqrt(vec4(dot(p0,p0),dot(p1,p1),dot(p2,p2),dot(p3,p3)));p0*=norm.x;p1*=norm.y;p2*=norm.z;p3*=norm.w;
+vec4 m=max(0.6-vec4(dot(x0,x0),dot(x1,x1),dot(x2,x2),dot(x3,x3)),0.0);m=m*m;
+return 42.0*dot(m*m,vec4(dot(p0,x0),dot(p1,x1),dot(p2,x2),dot(p3,x3)));}
+`;
+
+/* Sun */
+const sunGroup=new THREE.Group(); scene.add(sunGroup);
+const sunU={uTime:{value:0},uSpots:{value:.4},uCells:{value:0},uFlare:{value:0},uPulseT:{value:-1},uPulseO:{value:new THREE.Vector3(0,0,1)}};
+const sunMat=new THREE.ShaderMaterial({uniforms:sunU,
+vertexShader:`varying vec3 vPos;varying vec3 vN;varying vec3 vV;
+void main(){vPos=position;vec4 w=modelMatrix*vec4(position,1.0);vN=normalize(mat3(modelMatrix)*normal);vV=cameraPosition-w.xyz;gl_Position=projectionMatrix*viewMatrix*w;}`,
+fragmentShader:'#define OCT '+(lite?3:5)+'\n'+NOISE+`
+uniform float uTime,uSpots,uCells,uFlare,uPulseT;uniform vec3 uPulseO;
+varying vec3 vPos;varying vec3 vN;varying vec3 vV;
+vec3 hash3(vec3 p){p=vec3(dot(p,vec3(127.1,311.7,74.7)),dot(p,vec3(269.5,183.3,246.1)),dot(p,vec3(113.5,271.9,124.6)));return fract(sin(p)*43758.5453);}
+vec2 vor(vec3 x){vec3 b=floor(x);vec3 f=fract(x);float d1=8.0,d2=8.0;
+for(int i=-1;i<=1;i++)for(int j=-1;j<=1;j++)for(int k=-1;k<=1;k++){vec3 g=vec3(float(i),float(j),float(k));vec3 o=hash3(b+g);o=0.5+0.45*sin(uTime*0.35+6.2831*o);vec3 r=g+o-f;float d=dot(r,r);if(d<d1){d2=d1;d1=d;}else if(d<d2){d2=d;}}
+return vec2(sqrt(d1),sqrt(d2));}
+float fbm(vec3 p){float a=0.5,f=0.0;for(int i=0;i<OCT;i++){f+=a*snoise(p);p*=2.03;a*=0.5;}return f;}
+vec3 ramp(float h){vec3 c=mix(vec3(0.35,0.03,0.0),vec3(0.95,0.28,0.02),smoothstep(0.0,0.4,h));c=mix(c,vec3(1.0,0.62,0.15),smoothstep(0.35,0.7,h));c=mix(c,vec3(1.0,0.93,0.72),smoothstep(0.7,1.05,h));return c;}
+void main(){
+ vec3 p=normalize(vPos);float t=uTime*0.04;
+ float n=fbm(p*2.6+vec3(t,-t*0.7,t*0.4));
+ float n2=fbm(p*8.0-vec3(t*1.6,t,0.0));
+ vec2 v=vor(p*22.0);float edge=v.y-v.x;
+ float gran=smoothstep(0.0,0.16,edge);
+ float h=0.58+0.32*n+0.14*n2;
+ h*=mix(0.8,1.05,gran);
+ float lat=abs(p.y);
+ float band=smoothstep(0.06,0.3,lat)*smoothstep(0.62,0.38,lat);
+ float sp=snoise(p*3.4+vec3(0.0,0.0,uTime*0.008));
+ float pen=smoothstep(0.42,0.6,sp)*band*uSpots;
+ float umb=smoothstep(0.58,0.74,sp)*band*uSpots;
+ h=mix(h,0.28,pen*0.8);h=mix(h,0.02,umb);
+ h+=smoothstep(0.3,0.42,sp)*(1.0-smoothstep(0.42,0.5,sp))*band*uSpots*0.25; /* faculae */
+ vec3 col=ramp(h);
+ vec3 N=normalize(vN);float mu=max(dot(N,normalize(vV)),0.0);
+ col*=0.28+0.72*pow(mu,0.5);
+ col+=vec3(1.0,0.45,0.12)*pow(1.0-mu,2.5)*0.7;
+ col+=vec3(1.0,0.9,0.7)*uFlare*(0.4+0.6*n2);
+ float cl=(1.0-smoothstep(0.0,0.07,edge));
+ col+=vec3(0.45,0.85,1.0)*cl*uCells*(0.55+0.45*sin(uTime*2.4+v.x*30.0+p.y*12.0));
+ col=mix(col,col*0.45+vec3(0.02,0.06,0.09),uCells*0.35);
+ if(uPulseT>=0.0){float front=uPulseT*(2.0/4.6);float d=length(p-uPulseO);
+  float ring=exp(-pow((d-front)*14.0,2.0));float inside=step(d,front)*0.12*exp(-uPulseT*0.4);
+  col+=vec3(0.5,0.9,1.0)*(ring*1.6+inside)*step(uPulseT,7.0);}
+ gl_FragColor=vec4(col,1.0);
+}`});
+const sun=new THREE.Mesh(new THREE.SphereGeometry(1,lite?96:160,lite?64:120),sunMat);
+sunGroup.add(sun);
+
+/* Glow sprites */
+function glowTex(stops){const c=document.createElement('canvas');c.width=c.height=256;const g=c.getContext('2d');const gr=g.createRadialGradient(128,128,0,128,128,128);stops.forEach(s=>gr.addColorStop(s[0],s[1]));g.fillStyle=gr;g.fillRect(0,0,256,256);const t=new THREE.CanvasTexture(c);return t;}
+const glowA=new THREE.Sprite(new THREE.SpriteMaterial({map:glowTex([[0,'rgba(255,220,160,1)'],[.18,'rgba(255,170,70,.75)'],[.4,'rgba(255,100,20,.22)'],[1,'rgba(255,60,0,0)']]),blending:THREE.AdditiveBlending,depthWrite:false,transparent:true}));
+glowA.scale.set(4.6,4.6,1);scene.add(glowA);
+const glowB=new THREE.Sprite(new THREE.SpriteMaterial({map:glowTex([[0,'rgba(255,190,110,.55)'],[.25,'rgba(255,120,40,.16)'],[1,'rgba(255,60,0,0)']]),blending:THREE.AdditiveBlending,depthWrite:false,transparent:true}));
+glowB.scale.set(14,14,1);scene.add(glowB);
+
+/* Corona streamers: fresnel shell with noise */
+const coronaU={uTime:{value:0},uO:{value:1}};
+const corona=new THREE.Mesh(new THREE.SphereGeometry(1.55,96,64),new THREE.ShaderMaterial({uniforms:coronaU,transparent:true,depthWrite:false,blending:THREE.AdditiveBlending,side:THREE.BackSide,
+vertexShader:`varying vec3 vP;varying vec3 vN;varying vec3 vV;void main(){vP=position;vec4 w=modelMatrix*vec4(position,1.0);vN=normalize(mat3(modelMatrix)*normal);vV=normalize(cameraPosition-w.xyz);gl_Position=projectionMatrix*viewMatrix*w;}`,
+fragmentShader:NOISE+`uniform float uTime,uO;varying vec3 vP;varying vec3 vN;varying vec3 vV;
+void main(){float f=1.0-abs(dot(vN,vV));float rim=pow(f,1.2)*(1.0-pow(f,8.0));
+float s=snoise(normalize(vP)*vec3(5.0,1.6,5.0)+vec3(0.0,uTime*0.05,0.0));
+float a=rim*(0.25+0.6*smoothstep(-0.2,0.8,s));gl_FragColor=vec4(vec3(1.0,0.6,0.25)*a*0.3*uO,1.0);}`}));
+scene.add(corona);
+
+/* Magnetic loops (active regions) */
+const loopShared={uTime:{value:0},uO:{value:.3},uThought:{value:0}};
+const loopGroup=new THREE.Group();sunGroup.add(loopGroup);
+const loopVS=`varying vec2 vUv;void main(){vUv=uv;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.0);}`;
+const loopFS=`uniform float uTime,uO,uThought,uOff;varying vec2 vUv;
+void main(){float flow=pow(fract(vUv.x*2.0-uTime*0.32+uOff),7.0);float base=0.3+0.7*sin(3.14159*vUv.x);
+vec3 c=mix(vec3(1.0,0.6,0.22),vec3(0.45,0.88,1.0),uThought);
+float a=(0.22*base+flow*1.2)*uO;gl_FragColor=vec4(c*a,1.0);}`;
+function rnd(a,b){return a+Math.random()*(b-a);}
+function randDir(maxLat){const lat=rnd(-maxLat,maxLat),lon=rnd(0,Math.PI*2);return new THREE.Vector3(Math.cos(lat)*Math.cos(lon),Math.sin(lat),Math.cos(lat)*Math.sin(lon));}
+for(let i=0;i<(lite?30:46);i++){
+  const a=randDir(0.62);const axis=new THREE.Vector3().crossVectors(a,randDir(1.4)).normalize();
+  const ang=rnd(.07,.32);const b=a.clone().applyAxisAngle(axis,ang);const hgt=rnd(.12,.75)*(ang*3);
+  const pts=[];for(let s=0;s<=24;s++){const u=s/24;const d=a.clone().lerp(b,u).normalize();pts.push(d.multiplyScalar(1.0+hgt*Math.sin(Math.PI*u)));}
+  const curve=new THREE.CatmullRomCurve3(pts);
+  const m=new THREE.ShaderMaterial({uniforms:{uTime:loopShared.uTime,uO:loopShared.uO,uThought:loopShared.uThought,uOff:{value:Math.random()}},vertexShader:loopVS,fragmentShader:loopFS,transparent:true,depthWrite:false,blending:THREE.AdditiveBlending});
+  loopGroup.add(new THREE.Mesh(new THREE.TubeGeometry(curve,48,rnd(.004,.012),5,false),m));
+}
+
+/* Global dipole field lines */
+const fieldU={uTime:{value:0},uO:{value:0}};
+const fieldGroup=new THREE.Group();fieldGroup.rotation.z=0.12;sunGroup.add(fieldGroup);
+const fieldMat=new THREE.ShaderMaterial({uniforms:fieldU,transparent:true,depthWrite:false,blending:THREE.AdditiveBlending,
+vertexShader:`attribute float aT;varying float vT;void main(){vT=aT;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.0);}`,
+fragmentShader:`uniform float uTime,uO;varying float vT;void main(){float f=pow(fract(vT*3.0-uTime*0.18),10.0);float a=(0.16+f*1.1)*uO*(1.0-abs(vT-0.5)*0.6);gl_FragColor=vec4(vec3(0.5,0.85,1.0)*a,1.0);}`});
+[1.5,2.2,3.2,4.6,6.6,9.5].forEach(L=>{
+  for(let k=0;k<14;k++){
+    const phi=k/14*Math.PI*2+L;const th0=Math.asin(Math.sqrt(1/L));const pos=[],tt=[];const N=120;
+    for(let s=0;s<=N;s++){const th=th0+(Math.PI-2*th0)*s/N;const r=L*Math.sin(th)**2;
+      pos.push(r*Math.sin(th)*Math.cos(phi),r*Math.cos(th),r*Math.sin(th)*Math.sin(phi));tt.push(s/N);}
+    const g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.Float32BufferAttribute(pos,3));g.setAttribute('aT',new THREE.Float32BufferAttribute(tt,1));
+    fieldGroup.add(new THREE.Line(g,fieldMat));
+  }
+});
+
+/* Point sprite shader */
+function pointsMat(extraU,fade){return new THREE.ShaderMaterial({uniforms:Object.assign({uO:{value:1},uPx:{value:DPR},uK:{value:60}},extraU||{}),transparent:true,depthWrite:false,blending:THREE.AdditiveBlending,
+vertexShader:`attribute float aSize;attribute vec3 aCol;varying vec3 vC;varying float vF;uniform float uPx,uK;
+void main(){vC=aCol;vec4 mv=modelViewMatrix*vec4(position,1.0);gl_PointSize=clamp(aSize*uPx*uK/-mv.z,1.0,9.0*uPx);vF=${fade||'1.0'};gl_Position=projectionMatrix*mv;}`,
+fragmentShader:`uniform float uO;varying vec3 vC;varying float vF;void main(){vec2 c=gl_PointCoord-0.5;float d=length(c);float a=smoothstep(0.5,0.0,d);a*=a;gl_FragColor=vec4(vC*a*uO*vF,1.0);}`});}
+
+/* Starfield */
+(function(){const N=lite?3500:7000,p=[],s=[],c=[];for(let i=0;i<N;i++){const v=randDir(Math.PI/2).multiplyScalar(rnd(2600,3400));p.push(v.x,v.y,v.z);s.push(Math.random()<.04?rnd(2.5,4):rnd(.8,2));const w=Math.random();c.push(...(w<.15?[1,.8,.6]:w<.3?[.7,.8,1]:[.9,.9,.95]));}
+const g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.Float32BufferAttribute(p,3));g.setAttribute('aSize',new THREE.Float32BufferAttribute(s,1));g.setAttribute('aCol',new THREE.Float32BufferAttribute(c,3));
+const m=pointsMat({},null);m.uniforms.uK.value=3000;m.uniforms.uO.value=.9;const st=new THREE.Points(g,m);st.frustumCulled=false;scene.add(st);window.__stars=st;})();
+
+/* Solar wind (Parker spiral) */
+const HELIO=24;
+const WN=lite?1800:4200;const wind={r:new Float32Array(WN),th:new Float32Array(WN),ph:new Float32Array(WN),v:new Float32Array(WN)};
+const wPos=new Float32Array(WN*3);
+for(let i=0;i<WN;i++){wind.r[i]=rnd(1.05,HELIO);wind.th[i]=Math.acos(rnd(-1,1));wind.ph[i]=rnd(0,Math.PI*2);wind.v[i]=rnd(1.2,2.6);}
+const wGeo=new THREE.BufferGeometry();wGeo.setAttribute('position',new THREE.BufferAttribute(wPos,3));
+wGeo.setAttribute('aSize',new THREE.Float32BufferAttribute(Array.from({length:WN},()=>rnd(1,2.4)),1));
+wGeo.setAttribute('aCol',new THREE.Float32BufferAttribute(Array.from({length:WN*3},(_,k)=>[1,.72,.4][k%3]),3));
+const wMat=pointsMat({uH:{value:HELIO}},'smoothstep(1.0,2.5,length(position))*(1.0-smoothstep(0.75*24.0,24.0,length(position)))');
+wMat.uniforms.uK.value=70;
+const windPts=new THREE.Points(wGeo,wMat);windPts.frustumCulled=false;scene.add(windPts);
+
+/* CME burst */
+const CN=lite?900:1600;const cPos=new Float32Array(CN*3),cVel=new Float32Array(CN*3);
+const cGeo=new THREE.BufferGeometry();cGeo.setAttribute('position',new THREE.BufferAttribute(cPos,3));
+cGeo.setAttribute('aSize',new THREE.Float32BufferAttribute(Array.from({length:CN},()=>rnd(1,3)),1));
+cGeo.setAttribute('aCol',new THREE.Float32BufferAttribute(Array.from({length:CN*3},(_,k)=>[1,.78,.45][k%3]),3));
+const cMat=pointsMat({},null);cMat.uniforms.uK.value=80;cMat.uniforms.uO.value=0;
+const cmePts=new THREE.Points(cGeo,cMat);cmePts.frustumCulled=false;scene.add(cmePts);
+let cmeT=-1;
+function fireCME(){
+  const toCam=camera.position.clone().normalize();
+  const side=new THREE.Vector3(0,1,0).cross(toCam).normalize();
+  const dir=toCam.clone().multiplyScalar(.45).add(side.multiplyScalar(-.85)).add(new THREE.Vector3(0,.25,0)).normalize();
+  for(let i=0;i<CN;i++){const j=randDir(Math.PI/2).multiplyScalar(.42);const d=dir.clone().add(j).normalize();
+    cPos[i*3]=d.x;cPos[i*3+1]=d.y;cPos[i*3+2]=d.z;const sp=rnd(.6,2.2)*(Math.random()<.2?1.6:1);
+    cVel[i*3]=d.x*sp;cVel[i*3+1]=d.y*sp;cVel[i*3+2]=d.z*sp;}
+  cGeo.attributes.position.needsUpdate=true;cmeT=0;
+  gsap.fromTo(sunU.uFlare,{value:.9},{value:0,duration:2.4,ease:'power2.out'});
+}
+document.getElementById('cmeBtn').addEventListener('click',fireCME);
+ScrollTrigger.create({trigger:'#plasma',start:'top 45%',once:true,onEnter:()=>setTimeout(fireCME,600)});
+
+/* Thought pulse */
+const shellU={uO:{value:0}};
+const shell=new THREE.Mesh(new THREE.SphereGeometry(1,64,48),new THREE.ShaderMaterial({uniforms:shellU,transparent:true,depthWrite:false,blending:THREE.AdditiveBlending,
+vertexShader:`varying vec3 vN;varying vec3 vV;void main(){vec4 w=modelMatrix*vec4(position,1.0);vN=normalize(mat3(modelMatrix)*normal);vV=normalize(cameraPosition-w.xyz);gl_Position=projectionMatrix*viewMatrix*w;}`,
+fragmentShader:`uniform float uO;varying vec3 vN;varying vec3 vV;void main(){float f=1.0-abs(dot(vN,vV));float a=pow(f,3.0)*uO;gl_FragColor=vec4(vec3(0.5,0.9,1.0)*a,1.0);}`}));
+shell.visible=false;scene.add(shell);
+let pulseStart=-1;const pulseWorld=new THREE.Vector3();
+const mT=document.getElementById('mT'),mD=document.getElementById('mD'),mBar=document.getElementById('mBar'),mMsg=document.getElementById('mMsg'),pBtn=document.getElementById('pulseBtn');
+function firePulse(){
+  const local=sun.worldToLocal(camera.position.clone()).normalize();
+  const tilt=new THREE.Vector3(-.55,.25,0);local.add(tilt).normalize();
+  sunU.uPulseO.value.copy(local);
+  pulseWorld.copy(local).applyMatrix4(sun.matrixWorld);
+  pulseStart=clock.getElapsedTime();shell.visible=true;pBtn.disabled=true;mMsg.textContent='Signal travelling at 299,792 km/s…';
+}
+pBtn.addEventListener('click',firePulse);
+ScrollTrigger.create({trigger:'#pulse',start:'top 40%',once:true,onEnter:()=>setTimeout(firePulse,500)});
+
+/* Planets + orbits */
+const orbitGroup=new THREE.Group();scene.add(orbitGroup);
+const planets=[];const orbitMats=[];
+[[2.6,.05,0xb9a68f],[3.5,.08,0xe8c48a],[4.5,.085,0x6fa8ff],[5.6,.06,0xd86a3c],[8.2,.26,0xd9b48a],[10.8,.22,0xe6d39a],[13.3,.14,0x9fe3ee],[15.6,.14,0x5a7cff]].forEach(([r,s,c],i)=>{
+  const pts=[];for(let k=0;k<=160;k++){const a=k/160*Math.PI*2;pts.push(new THREE.Vector3(Math.cos(a)*r,0,Math.sin(a)*r));}
+  const om=new THREE.LineBasicMaterial({color:0xffd58a,transparent:true,opacity:0,depthWrite:false});orbitMats.push(om);
+  orbitGroup.add(new THREE.Line(new THREE.BufferGeometry().setFromPoints(pts),om));
+  const pm=new THREE.MeshBasicMaterial({color:c,transparent:true,opacity:0});orbitMats.push(pm);
+  const pl=new THREE.Mesh(new THREE.SphereGeometry(s,24,16),pm);pl.userData={r,w:.9/Math.pow(r,1.5)*2.2,a:rnd(0,6.28)};orbitGroup.add(pl);planets.push(pl);
+});
+
+/* Heliosphere */
+const helioU={uO:{value:0},uTime:{value:0}};
+const helio=new THREE.Mesh(new THREE.SphereGeometry(HELIO,96,64),new THREE.ShaderMaterial({uniforms:helioU,transparent:true,depthWrite:false,blending:THREE.AdditiveBlending,
+vertexShader:`varying vec3 vN;varying vec3 vV;varying vec3 vP;void main(){vP=position;vec4 w=modelMatrix*vec4(position,1.0);vN=normalize(mat3(modelMatrix)*normal);vV=normalize(cameraPosition-w.xyz);gl_Position=projectionMatrix*viewMatrix*w;}`,
+fragmentShader:NOISE+`uniform float uO,uTime;varying vec3 vN;varying vec3 vV;varying vec3 vP;void main(){float f=1.0-abs(dot(vN,vV));float n=snoise(vP*0.12+uTime*0.04);
+float a=(pow(f,2.4)*0.9+0.04)*(0.7+0.3*n)*uO;gl_FragColor=vec4(mix(vec3(0.35,0.55,1.0),vec3(0.8,0.5,1.0),f)*a,1.0);}`}));
+helio.scale.set(1,.92,1.35);helio.position.z=6;scene.add(helio);
+
+/* Galaxy */
+const GAL=new THREE.Group();GAL.position.set(-260,-6,40);GAL.rotation.x=.08;scene.add(GAL);
+(function(){const N=lite?16000:42000,p=[],s=[],c=[];
+for(let i=0;i<N;i++){let x,y,z,col;const u=Math.random();
+ if(u<.2){const r=Math.pow(Math.random(),2.2)*130;const v=randDir(Math.PI/2).multiplyScalar(r);x=v.x;y=v.y*.45;z=v.z;col=[1,.78+Math.random()*.1,.5];s.push(rnd(1.5,3.6));}
+ else{const arm=i%2;const r=50+Math.pow(Math.random(),.75)*500;const ang=arm*Math.PI+r*.0115+(Math.random()-.5)*(.35+24/r);
+  const j=(Math.random()-.5)*r*.08;x=Math.cos(ang)*r+j;z=Math.sin(ang)*r+(Math.random()-.5)*r*.08;y=(Math.random()-.5)*(12+8*Math.random());
+  const w=Math.random();col=w<.05?[1,.4,.6]:w<.5?[.62,.75,1]:[.95,.9,.85];s.push(Math.random()<.03?rnd(3.5,7):rnd(1.4,3.2));}
+ p.push(x,y,z);c.push(...col);}
+const g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.Float32BufferAttribute(p,3));g.setAttribute('aSize',new THREE.Float32BufferAttribute(s,1));g.setAttribute('aCol',new THREE.Float32BufferAttribute(c,3));
+const m=pointsMat({},null);m.uniforms.uK.value=700;m.uniforms.uO.value=0;const gp=new THREE.Points(g,m);gp.frustumCulled=false;GAL.add(gp);window.__gal=m;})();
+const core=new THREE.Sprite(new THREE.SpriteMaterial({map:glowTex([[0,'rgba(255,240,210,1)'],[.15,'rgba(255,190,120,.6)'],[.5,'rgba(255,140,80,.12)'],[1,'rgba(0,0,0,0)']]),blending:THREE.AdditiveBlending,depthWrite:false,transparent:true,opacity:0}));
+core.scale.set(260,260,1);GAL.add(core);
+function ringTex(){const c=document.createElement('canvas');c.width=c.height=128;const g=c.getContext('2d');g.strokeStyle='rgba(255,213,138,1)';g.lineWidth=3;g.beginPath();g.arc(64,64,44,0,Math.PI*2);g.stroke();g.fillStyle='rgba(255,180,90,1)';g.beginPath();g.arc(64,64,7,0,Math.PI*2);g.fill();return new THREE.CanvasTexture(c);}
+const marker=new THREE.Sprite(new THREE.SpriteMaterial({map:ringTex(),sizeAttenuation:false,transparent:true,depthWrite:false,depthTest:false,opacity:0}));marker.scale.set(.05,.05,1);scene.add(marker);
+
+/* ---------- Camera choreography ---------- */
+// side: +1 sun on right (text left), -1 sun on left (text right)
+const STATES=[
+ {p:[0,.15,4.3],  t:[-1.25,0,0],   loops:.35,field:0, wind:0,orb:0,hel:0,gal:0,cells:0,thought:0,spots:.45},
+ {p:[2.4,.9,3.4], t:[1.15,.1,0],   loops:.22,field:0, wind:0,orb:0,hel:0,gal:0,cells:0,thought:0,spots:.25},
+ {p:[-.5,2.2,8.5],t:[-2.3,0,0],    loops:.4, field:.25,wind:.15,orb:0,hel:0,gal:0,cells:0,thought:0,spots:.4},
+ {p:[-4.2,1.6,8], t:[2.2,.2,0],    loops:.45,field:1, wind:.2,orb:0,hel:0,gal:0,cells:0,thought:0,spots:.4},
+ {p:[.7,.35,2.55],t:[-.72,.05,0],  loops:1,  field:.15,wind:.1,orb:0,hel:0,gal:0,cells:0,thought:0,spots:1},
+ {p:[-1.5,1.05,2.35],t:[.62,.05,0],loops:.65,field:.1,wind:0,orb:0,hel:0,gal:0,cells:1,thought:1,spots:.5},
+ {p:[.2,.35,3.7], t:[-.95,0,0],    loops:.25,field:.2,wind:0,orb:0,hel:0,gal:0,cells:.2,thought:.6,spots:.4},
+ {p:[4,20,44],    t:[-11,0,2],     loops:.2, field:.35,wind:1,orb:1,hel:1,gal:.15,cells:0,thought:0,spots:.4},
+ {p:[-20,95,330], t:[-120,0,0],    loops:0,  field:0, wind:.3,orb:.2,hel:.35,gal:1,cells:0,thought:0,spots:.4},
+ {p:[-230,1150,560],t:[-250,0,40],  loops:0,  field:0, wind:0,orb:0,hel:0,gal:1,cells:0,thought:0,spots:.4},
+ {p:[-.3,.05,4.8],t:[-1.3,0,0],    loops:.5, field:.1,wind:0,orb:0,hel:0,gal:0,cells:0,thought:0,spots:.6}
+];
+// phone: Sun framed in the upper part of a tall screen, text below
+const MOB=[[[0,.1,6.2],[0,-1.25,0]],[[1.9,.8,5.6],[0,-1.2,0]],[[-.5,2.2,11],[0,-2.5,0]],[[-4,1.6,11],[0,-2.6,0]],
+ [[.5,.3,4],[0,-.95,0]],[[-1.2,.9,3.8],[0,-.9,0]],[[.2,.3,5.6],[0,-1.25,0]],[[4,34,70],[0,-16,2]],
+ [[-90,230,480],[-170,-80,40]],[[-260,1500,900],[-260,-300,-80]],[[-.3,.05,6.6],[0,-1.3,0]]];
+if(innerWidth/innerHeight<.85) STATES.forEach((st,i)=>{st.p=MOB[i][0];st.t=MOB[i][1];});
+const flat=st=>({px:st.p[0],py:st.p[1],pz:st.p[2],tx:st.t[0],ty:st.t[1],tz:st.t[2],loops:st.loops,field:st.field,wind:st.wind,orb:st.orb,hel:st.hel,gal:st.gal,cells:st.cells,thought:st.thought,spots:st.spots});
+const cur=flat(STATES[0]);
+for(let i=1;i<STATES.length;i++){
+  gsap.fromTo(cur,flat(STATES[i-1]),Object.assign(flat(STATES[i]),{ease:'power2.inOut',immediateRender:false,
+    scrollTrigger:{trigger:sections[i],start:'top bottom',end:'top 25%',scrub:reduced?true:1.2}}));
+}
+
+/* ---------- Loop ---------- */
+const clock=new THREE.Clock();
+const mouse={x:0,y:0,sx:0,sy:0};
+addEventListener('pointermove',e=>{mouse.x=e.clientX/innerWidth-.5;mouse.y=e.clientY/innerHeight-.5;},{passive:true});
+let narrow=false;
+function resize(){const w=innerWidth,h=innerHeight;renderer.setSize(w,h,false);camera.aspect=w/h;narrow=w/h<.85;camera.fov=narrow?58:46;camera.updateProjectionMatrix();}
+addEventListener('resize',resize);resize();
+const tmpP=new THREE.Vector3(),tmpT=new THREE.Vector3();let last=0;
+function frame(){
+  const t=clock.getElapsedTime();const dt=Math.min(t-last,.05);last=t;
+  sunU.uTime.value=t;coronaU.uTime.value=t;loopShared.uTime.value=t;fieldU.uTime.value=t;helioU.uTime.value=t;
+  sunGroup.rotation.y+=dt*(reduced?.01:.035);
+  // state
+  loopShared.uO.value=cur.loops;loopShared.uThought.value=cur.thought;fieldU.uO.value=cur.field;
+  sunU.uCells.value=cur.cells;sunU.uSpots.value=cur.spots;
+  wMat.uniforms.uO.value=cur.wind*.9;helioU.uO.value=cur.hel;window.__gal.uniforms.uO.value=cur.gal;core.material.opacity=cur.gal*.85;
+  marker.material.opacity=Math.max(0,cur.gal-.2)*1.2;
+  orbitMats.forEach((m,i)=>m.opacity=cur.orb*(m.isLineBasicMaterial?.28:1));
+  corona.visible=glowA.visible=true;
+  // wind update
+  if(cur.wind>.01){for(let i=0;i<WN;i++){let r=wind.r[i];r+=wind.v[i]*dt*(0.6+r*.08);if(r>HELIO){r=1.05;wind.ph[i]=Math.random()*6.283;wind.th[i]=Math.acos(rnd(-1,1));}
+    wind.r[i]=r;const ph=wind.ph[i]+sunGroup.rotation.y-r*.09;const st=Math.sin(wind.th[i]);
+    wPos[i*3]=r*st*Math.cos(ph);wPos[i*3+1]=r*Math.cos(wind.th[i]);wPos[i*3+2]=r*st*Math.sin(ph);}
+    wGeo.attributes.position.needsUpdate=true;}
+  // CME
+  if(cmeT>=0){cmeT+=dt;for(let i=0;i<CN*3;i++){cPos[i]+=cVel[i]*dt;}cGeo.attributes.position.needsUpdate=true;
+    cMat.uniforms.uO.value=Math.min(1,cmeT*4)*Math.max(0,1-cmeT/6);if(cmeT>6){cmeT=-1;cMat.uniforms.uO.value=0;}}
+  // pulse
+  if(pulseStart>=0){const pt=t-pulseStart;sunU.uPulseT.value=pt;
+    const front=pt*(2/4.6);shell.position.copy(pulseWorld);shell.scale.setScalar(Math.max(front,.001));shellU.uO.value=Math.max(0,1-pt/9)*.9;
+    const shown=Math.min(pt,4.6);mT.textContent=shown.toFixed(1)+' s';mD.textContent=Math.round(shown*299792).toLocaleString('en-US')+' km';mBar.style.width=(shown/4.6*100)+'%';
+    if(pt>=4.6&&mMsg.dataset.done!=='1'){mMsg.dataset.done='1';mMsg.textContent='Far side reached. The heliopause is still 16.7 hours away.';}
+    if(pt>9){pulseStart=-1;sunU.uPulseT.value=-1;shell.visible=false;pBtn.disabled=false;mMsg.dataset.done='';}}
+  // planets
+  planets.forEach(p=>{p.userData.a+=dt*p.userData.w*.35;p.position.set(Math.cos(p.userData.a)*p.userData.r,0,Math.sin(p.userData.a)*p.userData.r);});
+  GAL.rotation.y+=dt*.004;
+  // camera
+  mouse.sx+=(mouse.x-mouse.sx)*.04;mouse.sy+=(mouse.y-mouse.sy)*.04;
+  tmpP.set(cur.px,cur.py,cur.pz);tmpT.set(cur.tx,cur.ty,cur.tz);
+  const dist=tmpP.distanceTo(tmpT);
+  tmpP.x+=mouse.sx*dist*.06;tmpP.y-=mouse.sy*dist*.04;
+  camera.position.copy(tmpP);camera.lookAt(tmpT);
+  renderer.render(scene,camera);
+  requestAnimationFrame(frame);
+}
+requestAnimationFrame(frame);
+
+/* Count-up numbers */
+document.querySelectorAll('[data-count]').forEach(el=>{
+  const end=+el.dataset.count;if(el.dataset.to||reduced) return;
+  const o={v:0};const fmt=v=>Math.round(v).toLocaleString('en-US');
+  ScrollTrigger.create({trigger:el,start:'top 85%',once:true,onEnter:()=>gsap.to(o,{v:end,duration:1.8,ease:'power3.out',onUpdate:()=>el.textContent=fmt(o.v)})});
+});
+})();
+</script>
+</body></html>
